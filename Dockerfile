@@ -5,8 +5,10 @@
 #
  
 # Pull base image.
-FROM ubuntu:precise
- 
+FROM ubuntu:trusty
+
+ENV DEBIAN_FRONTEND noninteractive 
+
 RUN apt-get update
 
 # install deps
