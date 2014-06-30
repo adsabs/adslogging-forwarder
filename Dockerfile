@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 
 # install deps
-RUN apt-get install -y wget git golang ruby ruby-dev rubygems irb ri rdoc build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
+RUN apt-get install -y wget git golang ruby ruby-dev irb ri rdoc build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
 
 # clone logstash-forwarder
 RUN git clone git://github.com/elasticsearch/logstash-forwarder.git /tmp/logstash-forwarder
