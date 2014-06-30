@@ -28,6 +28,9 @@ RUN dpkg -i /tmp/logstash-forwarder/logstash-forwarder_*_amd64.deb
 # Cleanup
 RUN rm -rf /tmp/*
 
+# add the ssl certificates
+ADD ./certs /opt/certs
+
 ADD run.sh /run.sh
 RUN chmod 755 /run.sh
 

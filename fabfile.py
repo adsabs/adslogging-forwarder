@@ -70,4 +70,4 @@ def stop():
 @with_settings(warn_only=True)
 def rm():
     env.docker("rm adsabs-forwarder")
-         
+    
