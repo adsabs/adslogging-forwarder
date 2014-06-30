@@ -58,7 +58,7 @@ def run(ep='', **kwargs):
         for k,v in kwargs.items():
             evars += "-e %s=%s" % (k,v)
             
-    env.docker("run -d -t -i --name adsabs-forwarder %s %s %s %s adsabs/forwarder %s" \
+    env.docker("run -d -t -i --name adsabs-forwarder %s %s %s %s %s adsabs/forwarder %s" \
                % (evars, ports, links, vols, vfrom, ep))
     
 @task

@@ -3,7 +3,7 @@
 cat << EOF > /config.json
 {
   "network": {
-    "servers": [ "$LOGSTASH_SERVER" ],
+    "servers": [ "$LOGSTASH_PORT_12345_TCP_ADDR:12345" ],
     "timeout": 15
   },
   "files": [
