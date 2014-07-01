@@ -32,8 +32,26 @@ To run the container: `fab run`
 
 To run the container with an alternate entrypoint: e.g., `fab run:ep=bash`
 
-### setting $LOGSTASH_SERVER
+#### setting $LOGSTASH_SERVER
 
 The config.js template anticipates a `$LOGSTASH_SERVER` env variable which should be set to the hostname/ip of the logstash instance, including the port that the logstash [lumberjack](http://logstash.net/docs/1.4.2/inputs/lumberjack) input filter is configured to listen on. 
 
 To run the container specifying the logstash server: e.g., `fab run:LOGSTASH_SERVER=myhost:3331`
+
+## General fabric stuff
+
+There are two types of fabric tasks defined: prefix tasks and command tasks. The prefix tasks do things to affect the execution of the commands. 
+
+Examples:
+
+`fab run`: runs the docker container
+
+`fab show run`: shows the command fabric would use to run the container
+
+`fab build`: builds the docker container
+
+`fab sudo build`: executes the build command via sudo
+
+Fabric tasks can be chained together in various orders:
+
+`fab stop rm build show run`: stops, removes, builds and then shows the command to be used for executing the container
