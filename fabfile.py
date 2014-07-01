@@ -14,6 +14,9 @@ env.show_cmd = False
 
 @task
 def show():
+    """
+    output generated commands rather than executing (i.e., dry-run)
+    """
     env.show_cmd = True
 
 def docker(cmd, sudo=False, **kwargs):
@@ -32,42 +35,64 @@ env.docker = docker
 
 @task
 def sudo():
+    """
+    execute commands via sudo
+    """
     env.docker = sudo_docker
 
 @task
 @with_settings(warn_only=True)
 def build():
+    """
+    build the container
+    """
     env.docker("build -t adsabs/forwarder .")
         
 @task
 @with_settings(warn_only=True)
 def rmi():
+    """
+    remove the image
+    """
     env.docker("rmi adsabs/forwarder")
         
 @task
 @with_settings(warn_only=True)
 def run(ep='', **kwargs):
+    """
+    execute the container
     
-    ports = ""
-    links = "--link adsabs-logstash:logstash"
-    vols = "-v /dev/log:/dev/log"
-    vfrom = "--volumes-from adsabs-adsloggingdata"
+    ep - specify an alternate entrypoint, e.g., "ep=bash"
+    **kwargs - additional kwargs will be converted to environment variables passed to container
     
-    evars = ""
-    if len(kwargs):
-        for k,v in kwargs.items():
-            evars += "-e %s=%s" % (k,v)
-            
-    env.docker("run -d -t -i --name adsabs-forwarder %s %s %s %s %s adsabs/forwarder %s" \
-               % (evars, ports, links, vols, vfrom, ep))
+    """ 
+    vols = "-v /var/log/syslog:/var/log/syslog"
+    evars = len(kwargs) and ' '.join(["-e %s=%s" % (x[0],x[1]) for x in kwargs.items()]) or '' 
+    env.docker("run -d -t -i --name adsabs-forwarder %s %s adsabs/forwarder %s" \
+               % (evars, vols, ep))
     
 @task
 @with_settings(warn_only=True)
 def stop():
+    """
+    stop the container
+    """
     env.docker("stop adsabs-forwarder")
     
 @task
 @with_settings(warn_only=True)
 def rm():
+    """
+    remove the container
+    """
     env.docker("rm adsabs-forwarder")
+    
+@task
+@with_settings(warn_only=True)
+def gen_certs():
+    """
+    generate a set of ssl certificates
+    """
+    local("mkdir -p certs")
+    local("openssl req -x509 -batch -nodes -newkey rsa:2048 -keyout certs/forwarder.key -out certs/forwarder.crt")
     

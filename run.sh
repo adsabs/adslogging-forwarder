@@ -1,9 +1,11 @@
 #!/bin/bash
 
+logstash_server=${LOGSTASH_SERVER-localhost:12345}
+
 cat << EOF > /config.json
 {
   "network": {
-    "servers": [ "$LOGSTASH_PORT_12345_TCP_ADDR:12345" ],
+    "servers": [ "$logstash_server" ],
 	"ssl certificate": "/opt/certs/forwarder.crt",
     "ssl key": "/opt/certs/forwarder.key",
     "ssl ca": "/opt/certs/forwarder.crt",
@@ -11,7 +13,7 @@ cat << EOF > /config.json
   },
   "files": [
     {
-      "paths": [ "/dev/log" ],
+      "paths": [ "/var/log/syslog" ],
       "fields": { "type": "syslog" }
     }
   ]
